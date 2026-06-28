@@ -1,3 +1,9 @@
+Get-Content "$PSScriptRoot\.env" | ForEach-Object {
+    if ($_ -match "^\s*([^#][^=]*)=(.*)$") {
+        [System.Environment]::SetEnvironmentVariable($matches[1].Trim(), $matches[2].Trim())
+    }
+}
+
 $fecha = Get-Date -Format "yyyy-MM-dd"
 New-Item -ItemType Directory -Force -Path "resguardos_tpi\$fecha" | Out-Null
 

@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source "$(dirname "$0")/.env"
+
 FECHA=$(date +%Y-%m-%d)
 mkdir -p resguardos_tpi/$FECHA
 
