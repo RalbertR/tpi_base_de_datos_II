@@ -782,5 +782,20 @@ bibliotecaBody.addEventListener('click', async (e) => {
 
 // --- Init ---
 
+function initDatePickers() {
+	document.querySelectorAll('input[type="date"]').forEach((input) => {
+		input.addEventListener('click', () => {
+			if (typeof input.showPicker === 'function') {
+				try {
+					input.showPicker();
+				} catch {
+					// El navegador bloqueó showPicker; el click nativo sigue funcionando
+				}
+			}
+		});
+	});
+}
+
+initDatePickers();
 loadJuegos();
 loadUsuarios();
