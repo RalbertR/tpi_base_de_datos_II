@@ -13,10 +13,11 @@ router.post('/', async (req, res) => {
 	}
 });
 
-// READ — todas
+// READ — por defecto solo completadas; ?todos=true incluye reembolsadas
 router.get('/', async (req, res) => {
 	try {
-		const transacciones = await Transaccion.find();
+		const filtro = req.query.todos === 'true' ? {} : { estado: 'completada' };
+		const transacciones = await Transaccion.find(filtro);
 		res.json(transacciones);
 	} catch (error) {
 		res.status(500).json({ error: error.message });
@@ -37,7 +38,7 @@ router.get('/:id', async (req, res) => {
 // UPDATE
 router.put('/:id', async (req, res) => {
 	try {
-		const transaccion = await Transaccion.findByIdAndUpdate(req.params.id, req.body, { new: true });
+		const transaccion = await Transaccion.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
 		if (!transaccion) return res.status(404).json({ error: 'Transaccion no encontrada' });
 		res.json(transaccion);
 	} catch (error) {
@@ -45,10 +46,14 @@ router.put('/:id', async (req, res) => {
 	}
 });
 
-// DELETE
+// DELETE — baja lógica (reembolso)
 router.delete('/:id', async (req, res) => {
 	try {
-		const transaccion = await Transaccion.findByIdAndDelete(req.params.id);
+		const transaccion = await Transaccion.findByIdAndUpdate(
+			req.params.id,
+			{ estado: 'reembolsada' },
+			{ new: true, runValidators: true }
+		);
 		if (!transaccion) return res.status(404).json({ error: 'Transaccion no encontrada' });
 		res.json(transaccion);
 	} catch (error) {

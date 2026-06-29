@@ -38,7 +38,7 @@ router.get('/:id', async (req, res) => {
 // UPDATE
 router.put('/:id', async (req, res) => {
 	try {
-		const juego = await Juego.findByIdAndUpdate(req.params.id, req.body, { new: true });
+		const juego = await Juego.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
 		if (!juego) return res.status(404).json({ error: 'Juego no encontrado' });
 		res.json(juego);
 	} catch (error) {
@@ -52,7 +52,7 @@ router.delete('/:id', async (req, res) => {
 		const juego = await Juego.findByIdAndUpdate(
 			req.params.id,
 			{ disponible_en_tienda: false },
-			{ new: true }
+			{ new: true, runValidators: true }
 		);
 		if (!juego) return res.status(404).json({ error: 'Juego no encontrado' });
 		res.json(juego);

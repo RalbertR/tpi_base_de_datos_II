@@ -6,6 +6,7 @@ const transaccionSchema = new mongoose.Schema({
 	fecha_compra: { type: Date, default: Date.now },
 	monto_pagado: { type: Number, required: true },
 	metodo_pago: { type: String, required: true },
+	estado: { type: String, enum: ['completada', 'reembolsada'], default: 'completada' },
 });
 
 const Transaccion = mongoose.model('transacciones', transaccionSchema);

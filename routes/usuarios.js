@@ -38,7 +38,7 @@ router.get('/:id', async (req, res) => {
 // UPDATE
 router.put('/:id', async (req, res) => {
 	try {
-		const usuario = await Usuario.findByIdAndUpdate(req.params.id, req.body, { new: true });
+		const usuario = await Usuario.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
 		if (!usuario) return res.status(404).json({ error: 'Usuario no encontrado' });
 		res.json(usuario);
 	} catch (error) {
@@ -52,7 +52,7 @@ router.delete('/:id', async (req, res) => {
 		const usuario = await Usuario.findByIdAndUpdate(
 			req.params.id,
 			{ estado_cuenta: 'inactivo' },
-			{ new: true }
+			{ new: true, runValidators: true }
 		);
 		if (!usuario) return res.status(404).json({ error: 'Usuario no encontrado' });
 		res.json(usuario);

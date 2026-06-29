@@ -38,7 +38,7 @@ router.get('/:id', async (req, res) => {
 // UPDATE
 router.put('/:id', async (req, res) => {
 	try {
-		const entrada = await Biblioteca.findByIdAndUpdate(req.params.id, req.body, { new: true });
+		const entrada = await Biblioteca.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
 		if (!entrada) return res.status(404).json({ error: 'Entrada no encontrada' });
 		res.json(entrada);
 	} catch (error) {
@@ -52,7 +52,7 @@ router.delete('/:id', async (req, res) => {
 		const entrada = await Biblioteca.findByIdAndUpdate(
 			req.params.id,
 			{ estado: 'removido' },
-			{ new: true }
+			{ new: true, runValidators: true }
 		);
 		if (!entrada) return res.status(404).json({ error: 'Entrada no encontrada' });
 		res.json(entrada);
