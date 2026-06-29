@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>TPI BD II — Steam</title>
+	<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+	<header>
+		<h1>TPI Base de Datos II</h1>
+		<p>Tienda de juegos — MongoDB Atlas</p>
+	</header>
+
+	<nav class="tabs">
+		<button type="button" class="tab active" data-tab="juegos">Juegos</button>
+		<button type="button" class="tab" data-tab="usuarios">Usuarios</button>
+		<button type="button" class="tab" data-tab="transacciones">Transacciones</button>
+		<button type="button" class="tab" data-tab="biblioteca">Biblioteca</button>
+	</nav>
+
+	<main>
+		<!-- JUEGOS -->
+		<section class="tab-panel active" id="panel-juegos">
+			<section class="panel">
+				<h2 id="juego-form-title">Nuevo juego</h2>
+				<form id="juego-form">
+					<input type="hidden" id="juego-id">
+					<div class="form-grid">
+						<label>Título <input type="text" id="juego-titulo" required></label>
+						<label>Precio <input type="number" id="juego-precio" step="0.01" min="0" required></label>
+						<label>Desarrollador <input type="text" id="juego-desarrollador" required></label>
+						<label class="checkbox-label inline">
+							<input type="checkbox" id="juego-disponible" checked>
+							Disponible en tienda
+						</label>
+					</div>
+
+					<fieldset>
+						<legend>Requisitos mínimos</legend>
+						<div class="form-grid">
+							<label>SO <input type="text" id="juego-min-so"></label>
+							<label>Procesador <input type="text" id="juego-min-procesador"></label>
+							<label>RAM <input type="text" id="juego-min-ram"></label>
+							<label>Gráficos <input type="text" id="juego-min-graficos"></label>
+							<label>Almacenamiento <input type="text" id="juego-min-almacenamiento"></label>
+						</div>
+					</fieldset>
+
+					<fieldset>
+						<legend>Requisitos recomendados</legend>
+						<div class="form-grid">
+							<label>SO <input type="text" id="juego-rec-so"></label>
+							<label>Procesador <input type="text" id="juego-rec-procesador"></label>
+							<label>RAM <input type="text" id="juego-rec-ram"></label>
+							<label>Gráficos <input type="text" id="juego-rec-graficos"></label>
+							<label>Almacenamiento <input type="text" id="juego-rec-almacenamiento"></label>
+						</div>
+					</fieldset>
+
+					<fieldset>
+						<legend>Idiomas soportados</legend>
+						<div class="form-grid">
+							<label>Audio (códigos separados por coma) <input type="text" id="juego-audio" placeholder="en, ja"></label>
+							<label>Subtítulos (códigos separados por coma) <input type="text" id="juego-subtitulos" placeholder="en, es, ja"></label>
+						</div>
+					</fieldset>
+
+					<div class="form-actions">
+						<button type="submit" id="juego-submit">Crear</button>
+						<button type="button" id="juego-cancel" class="secondary" hidden>Cancelar</button>
+					</div>
+				</form>
+			</section>
+			<section class="panel">
+				<div class="panel-header">
+					<h2>Juegos</h2>
+					<div class="panel-tools">
+						<label class="checkbox-label">
+							<input type="checkbox" id="juegos-mostrar-baja">
+							Mostrar dados de baja
+						</label>
+						<button type="button" class="secondary refresh" data-refresh="juegos">Actualizar</button>
+					</div>
+				</div>
+				<p class="status" id="juegos-status"></p>
+				<div class="table-wrap">
+					<table>
+						<thead>
+							<tr><th>Título</th><th>Precio</th><th>Desarrollador</th><th>Idiomas</th><th>Estado</th><th>Acciones</th></tr>
+						</thead>
+						<tbody id="juegos-body"></tbody>
+					</table>
+				</div>
+			</section>
+		</section>
+
+		<!-- USUARIOS -->
+		<section class="tab-panel" id="panel-usuarios">
+			<section class="panel">
+				<h2 id="usuario-form-title">Nuevo usuario</h2>
+				<form id="usuario-form">
+					<input type="hidden" id="usuario-id">
+					<label>Username <input type="text" id="usuario-username" required></label>
+					<label>Email <input type="email" id="usuario-email" required></label>
+					<label>Fecha de registro <input type="date" id="usuario-fecha"></label>
+					<label>Estado cuenta
+						<select id="usuario-estado">
+							<option value="activo">activo</option>
+							<option value="inactivo">inactivo</option>
+						</select>
+					</label>
+					<div class="form-actions">
+						<button type="submit" id="usuario-submit">Crear</button>
+						<button type="button" id="usuario-cancel" class="secondary" hidden>Cancelar</button>
+					</div>
+				</form>
+			</section>
+			<section class="panel">
+				<div class="panel-header">
+					<h2>Usuarios</h2>
+					<div class="panel-tools">
+						<label class="checkbox-label">
+							<input type="checkbox" id="usuarios-mostrar-baja">
+							Mostrar dados de baja
+						</label>
+						<button type="button" class="secondary refresh" data-refresh="usuarios">Actualizar</button>
+					</div>
+				</div>
+				<p class="status" id="usuarios-status"></p>
+				<table>
+					<thead>
+						<tr><th>Username</th><th>Email</th><th>Registro</th><th>Estado</th><th>Acciones</th></tr>
+					</thead>
+					<tbody id="usuarios-body"></tbody>
+				</table>
+			</section>
+		</section>
+
+		<!-- TRANSACCIONES -->
+		<section class="tab-panel" id="panel-transacciones">
+			<section class="panel">
+				<h2 id="transaccion-form-title">Nueva transacción</h2>
+				<form id="transaccion-form">
+					<input type="hidden" id="transaccion-id">
+					<label>Usuario <select id="transaccion-usuario" required></select></label>
+					<label>Juego <select id="transaccion-juego" required></select></label>
+					<label>Fecha de compra <input type="date" id="transaccion-fecha"></label>
+					<label>Monto pagado <input type="number" id="transaccion-monto" step="0.01" min="0" required></label>
+					<label>Método de pago
+						<select id="transaccion-metodo" required>
+							<option value="tarjeta_credito">tarjeta_credito</option>
+							<option value="tarjeta_debito">tarjeta_debito</option>
+							<option value="paypal">paypal</option>
+							<option value="steam_wallet">steam_wallet</option>
+						</select>
+					</label>
+					<div class="form-actions">
+						<button type="submit" id="transaccion-submit">Registrar compra</button>
+						<button type="button" id="transaccion-cancel" class="secondary" hidden>Cancelar</button>
+					</div>
+				</form>
+			</section>
+			<section class="panel">
+				<div class="panel-header">
+					<h2>Historial de transacciones</h2>
+					<button type="button" class="secondary refresh" data-refresh="transacciones">Actualizar</button>
+				</div>
+				<p class="status" id="transacciones-status"></p>
+				<table>
+					<thead>
+						<tr><th>Usuario</th><th>Juego</th><th>Fecha compra</th><th>Monto</th><th>Método</th><th>Acciones</th></tr>
+					</thead>
+					<tbody id="transacciones-body"></tbody>
+				</table>
+			</section>
+		</section>
+
+		<!-- BIBLIOTECA -->
+		<section class="tab-panel" id="panel-biblioteca">
+			<section class="panel">
+				<h2 id="biblioteca-form-title">Agregar a biblioteca</h2>
+				<form id="biblioteca-form">
+					<input type="hidden" id="biblioteca-id">
+					<label>Usuario <select id="biblioteca-usuario" required></select></label>
+					<label>Juego <select id="biblioteca-juego" required></select></label>
+					<label>Fecha de adquisición <input type="date" id="biblioteca-fecha" required></label>
+					<label>Estado
+						<select id="biblioteca-estado">
+							<option value="activo">activo</option>
+							<option value="removido">removido</option>
+						</select>
+					</label>
+					<div class="form-actions">
+						<button type="submit" id="biblioteca-submit">Agregar</button>
+						<button type="button" id="biblioteca-cancel" class="secondary" hidden>Cancelar</button>
+					</div>
+				</form>
+			</section>
+			<section class="panel">
+				<div class="panel-header">
+					<h2>Biblioteca de usuarios</h2>
+					<div class="panel-tools">
+						<label class="checkbox-label">
+							<input type="checkbox" id="biblioteca-mostrar-baja">
+							Mostrar removidos (reembolsados)
+						</label>
+						<button type="button" class="secondary refresh" data-refresh="biblioteca">Actualizar</button>
+					</div>
+				</div>
+				<p class="status" id="biblioteca-status"></p>
+				<table>
+					<thead>
+						<tr><th>Usuario</th><th>Juego</th><th>Adquisición</th><th>Estado</th><th>Acciones</th></tr>
+					</thead>
+					<tbody id="biblioteca-body"></tbody>
+				</table>
+			</section>
+		</section>
+	</main>
+
+	<script src="/js/app.js"></script>
+</body>
+</html>

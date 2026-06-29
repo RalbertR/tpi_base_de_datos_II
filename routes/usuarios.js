@@ -13,10 +13,11 @@ router.post('/', async (req, res) => {
 	}
 });
 
-// READ — solo cuentas activas (baja lógica)
+// READ — por defecto solo activos; ?todos=true incluye dados de baja
 router.get('/', async (req, res) => {
 	try {
-		const usuarios = await Usuario.find({ estado_cuenta: 'activo' });
+		const filtro = req.query.todos === 'true' ? {} : { estado_cuenta: 'activo' };
+		const usuarios = await Usuario.find(filtro);
 		res.json(usuarios);
 	} catch (error) {
 		res.status(500).json({ error: error.message });

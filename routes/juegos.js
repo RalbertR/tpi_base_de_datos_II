@@ -13,10 +13,11 @@ router.post('/', async (req, res) => {
 	}
 });
 
-// READ — solo juegos disponibles en tienda (baja lógica)
+// READ — por defecto solo activos; ?todos=true incluye dados de baja
 router.get('/', async (req, res) => {
 	try {
-		const juegos = await Juego.find({ disponible_en_tienda: true });
+		const filtro = req.query.todos === 'true' ? {} : { disponible_en_tienda: true };
+		const juegos = await Juego.find(filtro);
 		res.json(juegos);
 	} catch (error) {
 		res.status(500).json({ error: error.message });
