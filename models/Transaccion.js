@@ -5,7 +5,7 @@ const transaccionSchema = new mongoose.Schema({
 	id_juego: { type: mongoose.Schema.Types.ObjectId, ref: 'juegos', required: true },
 	fecha_compra: { type: Date, default: Date.now },
 	monto_pagado: { type: Number, required: true },
-	metodo_pago: { type: String, required: true },
+	metodo_pago: { type: String, enum: ['tarjeta_credito', 'tarjeta_debito', 'transferencia', 'efectivo'], required: true },
 	estado: { type: String, enum: ['completada', 'reembolsada'], default: 'completada' },
 });
 
